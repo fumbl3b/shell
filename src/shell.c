@@ -173,9 +173,15 @@ void lsh_loop(void)
 	char *line;
 	char **args;
 	int status;
+	char cwd[1024];
 
 	do {
-		printf("> ");
+		if (getcwd(cwd, sizeof(cwd)) != NULL) {
+			printf("%s> ", cwd);
+		} else {
+			perror("lsh");
+			return;
+		}
 		line = lsh_read_line();
 		args = lsh_split_line(line);
 		status = lsh_execute(args);
